@@ -24,3 +24,28 @@ End Sub
             MessageBox.Show("Error al consultar: " & ex.Message, "Error")
         End Try
     End Sub
+
+=============================================================================
+codigo python
+=====
+import urllib.request
+import urllib.response
+import json
+import sys
+import _json
+
+list1 =[]
+datos= urllib.request.urlopen('https://srienlinea.sri.gob.ec/movil-servicios/api/v1.0/estadoTributario/0993385452001')
+#datos= urllib.request.urlopen('https://srienlinea.sri.gob.ec/sri-en-linea/SriRucWeb/ConsultaRuc/Consultas/consultaRuc/0930394523001')
+#https://srienlinea.sri.gob.ec/sri-estado-tributario-internet/rest/estado-tributario/consulta/persona/
+#https://srienlinea.sri.gob.ec/movil-servicios/api/v1.0/estadoTributario/
+from bs4 import BeautifulSoup
+#soup = BeautifulSoup(datos)
+soup= BeautifulSoup(datos, features="html.parser")
+titulo= soup.contents
+print(titulo)
+datos = json.loads(titulo[0])
+ruc = datos['ruc']
+razonSocial =datos['razonSocial']
+print(f"RUC: {ruc}")
+print(f"Razón Social: {razonSocial}")
