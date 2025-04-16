@@ -1,0 +1,26 @@
+Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        ConsultarDatosSRI("0993275042001")
+End Sub
+
+    Private Sub ConsultarDatosSRI(rucInput As String)
+        Try
+            Dim url As String = "https://srienlinea.sri.gob.ec/movil-servicios/api/v1.0/estadoTributario/" & rucInput
+            Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            Dim response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+
+            Using reader As New StreamReader(response.GetResponseStream())
+                Dim result As String = reader.ReadToEnd()
+
+                Dim jsonData As JObject = JObject.Parse(result)
+
+                Dim ruc As String = jsonData("ruc").ToString()
+                Dim razonSocial As String = jsonData("razonSocial").ToString()
+                MsgBox(ruc & " " & razonSocial)
+
+                ' Mostrar los datos en un MessageBox, puedes usar TextBox también
+                MessageBox.Show("RUC: " & ruc & vbCrLf & "Razón Social: " & razonSocial, "Resultado")
+            End Using
+        Catch ex As Exception
+            MessageBox.Show("Error al consultar: " & ex.Message, "Error")
+        End Try
+    End Sub
